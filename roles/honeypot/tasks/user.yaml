@@ -1,0 +1,7 @@
+- name: Create sshesame system user
+  become: true
+  ansible.builtin.user:
+    name: sshesame
+    home: /var/lib/sshesame
+    system: true
+    state: present

@@ -1,0 +1,13 @@
+honeypots:
+  hosts:
+    sshesame-1:
+      ansible_host: 10.68.7.165 
+      ansible_port: 2222
+      ansible_user: ops
+
+observers:
+  hosts:
+    grafana-1: 
+      ansible_host: 10.68.7.141
+      ansible_user: ops
+

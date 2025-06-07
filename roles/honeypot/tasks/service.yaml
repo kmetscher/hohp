@@ -1,0 +1,53 @@
+- name: Create sshesame log file
+  become: true
+  ansible.builtin.file:
+    path: /var/log/sshesame.log
+    owner: syslog
+    group: adm
+    state: touch
+    mode: '0640'
+
+- name: Copy sshesame config file
+  become: true
+  ansible.builtin.copy:
+    src: sshesame-config.yaml
+    dest: /etc/sshesame/sshesame.yaml
+    owner: sshesame
+    group: sshesame
+    mode: '0600'
+
+- name: Copy sshesame service definition file
+  become: true
+  ansible.builtin.copy:
+    src: sshesame.service
+    dest: /etc/systemd/system/sshesame.service
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Copy sshesame rsyslog configuration file
+  become: true
+  ansible.builtin.copy:
+    src: rsyslog.conf
+    dest: /etc/rsyslog.d/99-sshesame.conf
+    owner: syslog
+    group: syslog
+    mode: '0640'
+
+- name: Restart rsyslog service
+  become: true
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted
+
+- name: Set network bind capability on sshesame binary
+  become: true
+  ansible.builtin.command:
+    cmd: setcap 'cap_net_bind_service=+ep' /usr/bin/sshesame
+
+- name: Start and enable sshesame service
+  become: true
+  ansible.builtin.service:
+    name: sshesame
+    state: restarted
+    enabled: true

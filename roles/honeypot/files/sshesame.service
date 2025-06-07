@@ -1,0 +1,14 @@
+[Unit]
+Description=sshesame honeypot server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=sshesame
+Group=sshesame
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+ExecStart=/usr/bin/sshesame -config /etc/sshesame/sshesame.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

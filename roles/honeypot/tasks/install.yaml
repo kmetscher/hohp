@@ -1,0 +1,45 @@
+- name: Ensure git is installed
+  become: true
+  ansible.builtin.apt:
+    name: git
+    state: present
+    update_cache: true
+
+- name: Ensure Go is installed
+  become: true
+  community.general.snap:
+    name: go
+    classic: true
+    state: present
+
+- name: Checkout sshesame repo
+  ansible.builtin.git:
+    repo: 'https://github.com/jaksi/sshesame.git'
+    dest: /tmp/checkouts/sshesame
+    single_branch: yes
+    version: master
+
+- name: Build sshesame binary
+  ansible.builtin.command:
+    chdir: /tmp/checkouts/sshesame
+    cmd: go build
+
+- name: Copy sshesame binary to path
+  become: true
+  ansible.builtin.copy:
+    remote_src: true
+    src: /tmp/checkouts/sshesame/sshesame
+    dest: /usr/bin/sshesame
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create sshesame configuration directory
+  become: true
+  ansible.builtin.file:
+    path: /etc/sshesame
+    owner: sshesame
+    group: sshesame
+    mode: '0700'
+    state: directory
+

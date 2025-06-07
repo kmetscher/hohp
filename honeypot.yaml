@@ -1,0 +1,3 @@
+- hosts: honeypots
+  roles:
+    - honeypot
