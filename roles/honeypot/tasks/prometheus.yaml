@@ -1,0 +1,23 @@
+- name: Update package lists and install Prometheus
+  become: true
+  ansible.builtin.apt:
+    name: prometheus
+    state: present
+    update_cache: true
+
+- name: Copy Prometheus configuration file
+  become: true
+  ansible.builtin.copy:
+    src: prometheus.yaml
+    dest: /etc/prometheus/prometheus.yml
+    backup: true
+    owner: prometheus
+    group: prometheus
+    mode: '0644'
+
+- name: Restart Prometheus service
+  become: true
+  ansible.builtin.service:
+    name: prometheus
+    state: restarted
+

@@ -1,0 +1,39 @@
+- name: Update package lists and install apt-transport-https
+  become: true
+  ansible.builtin.apt:
+    name: apt-transport-https
+    state: present
+    update_cache: true
+    
+- name: Retrieve Grafana repository signing key
+  become: true
+  ansible.builtin.get_url:
+    url: https://apt.grafana.com/gpg.key
+    dest: /etc/apt/keyrings/grafana.asc
+    checksum: sha256:58052c148058ace26dbd01ce057afa5709fb9d39c8a8ab16800be3f42fc02ab2
+
+- name: Add Grafana repository to apt sources
+  become: true
+  ansible.builtin.deb822_repository:
+    name: grafana
+    types: deb
+    uris: https://apt.grafana.com
+    suites: stable
+    components:
+      - main
+    signed_by: /etc/apt/keyrings/grafana.asc
+
+- name: Update package lists and install Grafana
+  become: true
+  ansible.builtin.apt:
+    name: grafana
+    state: present
+    update_cache: true
+
+- name: Start and enable the Grafana service
+  become: true
+  ansible.builtin.service:
+    name: grafana-server
+    state: restarted
+    enabled: true
+

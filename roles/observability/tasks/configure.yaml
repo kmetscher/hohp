@@ -1,0 +1,14 @@
+- name: Install data source provisioning file
+  become: true
+  ansible.builtin.template:
+    src: datasources.yaml
+    dest: /etc/grafana/provisioning/datasources/honeypots.yaml
+    owner: grafana
+    group: grafana
+    mode: '0600'
+
+- name: Restart Grafana
+  become: true
+  ansible.builtin.service:
+    name: grafana-server
+    state: restarted

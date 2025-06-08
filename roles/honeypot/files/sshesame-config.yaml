@@ -31,7 +31,7 @@ logging:
 
   # Address to export and serve prometheus metrics on.
   # If unspecified or null, metrics are not served.
-  metrics_address: '0.0.0.0:2112'
+  metrics_address: '127.0.0.1:2112'
 
   # When logging in JSON, log addresses as objects including the hostname and the port instead of strings.
   split_host_port: true
