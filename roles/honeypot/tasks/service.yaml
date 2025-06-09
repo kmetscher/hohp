@@ -34,16 +34,16 @@
     group: syslog
     mode: '0640'
 
+- name: Reload systemd units
+  become: true
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+
 - name: Restart rsyslog service
   become: true
   ansible.builtin.service:
     name: rsyslog
     state: restarted
-
-- name: Set network bind capability on sshesame binary
-  become: true
-  ansible.builtin.command:
-    cmd: setcap 'cap_net_bind_service=+ep' /usr/bin/sshesame
 
 - name: Start and enable sshesame service
   become: true

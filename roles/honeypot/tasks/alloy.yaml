@@ -23,26 +23,29 @@
       - main
     signed_by: /etc/apt/keyrings/grafana.asc
 
-- name: Update package lists and install Grafana and Loki
+- name: Update package lists and install alloy
   become: true
   ansible.builtin.apt:
-    pkg: 
-      - grafana
-      - loki
+    name: alloy
     state: present
     update_cache: true
 
-- name: Start and enable the Grafana service
+- name: Install alloy configuration file
+  become: true
+  ansible.builtin.template:
+    src: config.alloy
+    dest: /etc/alloy/config.alloy
+    owner: alloy
+    group: alloy
+    mode: '0600'
+    backup: true
+
+- name: Restart and enable alloy service
   become: true
   ansible.builtin.service:
-    name: grafana-server
+    name: alloy
     state: restarted
     enabled: true
 
-- name: Start and enable the Loki service
-  become: true
-  ansible.builtin.service:
-    name: loki
-    state: restarted
-    enabled: true
+
 

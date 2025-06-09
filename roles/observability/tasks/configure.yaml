@@ -1,3 +1,12 @@
+- name: Install Loki configuration file
+  become: true
+  ansible.builtin.copy:
+    src: loki-config.yaml
+    dest: /etc/loki/config.yml
+    owner: loki
+    mode: '0644'
+    backup: true
+
 - name: Install data source provisioning file
   become: true
   ansible.builtin.template:
@@ -6,6 +15,12 @@
     owner: grafana
     group: grafana
     mode: '0600'
+
+- name: Restart Loki
+  become: true
+  ansible.builtin.service:
+    name: loki
+    state: restarted
 
 - name: Restart Grafana
   become: true

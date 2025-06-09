@@ -2,3 +2,4 @@
 - import_tasks: install.yaml
 - import_tasks: service.yaml
 - import_tasks: prometheus.yaml
+- import_tasks: alloy.yaml
